@@ -21,6 +21,9 @@ showPostNavLinks = true
 env = "development"
 keywords = ["oss", "foss"]
 
+[params.assets]
+disableFingerprinting = true
+
 # Shown on the home page
 socialIcons = [
     { name = "github", url = "https://github.com/letsbuilda/" },

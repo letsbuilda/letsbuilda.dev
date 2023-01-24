@@ -1,0 +1,34 @@
+title = "Let's build a ..."
+languageCode = "en-us"
+defaultContentLanguage = "en"
+timeZone = "America/Chicago"
+copyright = "© 2022-present, Let's build a ..."
+
+theme = "PaperMod"
+
+baseURL = 'https://letsbuilda.dev/'
+enableRobotsTXT = true
+paginate = 15
+
+disableKinds = ["taxonomyTerm"]
+
+[params]
+description = "Let's build A ..."
+defaultTheme = "auto"
+showReadingTime = true
+showCodeCopyButtons = true
+showPostNavLinks = true
+env = "development"
+keywords = ["oss", "foss"]
+
+# Shown on the home page
+socialIcons = [
+    { name = "github", url = "https://github.com/letsbuilda/" },
+]
+
+# Configure the home page
+[params.profileMode]
+enabled = true
+title = "Let's build a ... "
+subtitle = "Contributing made easy"
+imageUrl = "/profile-image.png"

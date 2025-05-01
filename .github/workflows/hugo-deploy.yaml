@@ -14,4 +14,4 @@ jobs:
       pages: write
       id-token: write
 
-    uses: darbiadev/.github/.github/workflows/github-pages-go-hugo.yaml@29197a38ef3741064f47b623ede0c1ad22402c57 # v13.0.3
+    uses: darbiadev/.github/.github/workflows/github-pages-go-hugo.yaml@91dda16028f109ac78016dd740206fd109740068 # v15.0.0

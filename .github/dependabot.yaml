@@ -8,3 +8,12 @@ updates:
       ci-dependencies:
         patterns:
           - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      javascript-dependencies:
+        patterns:
+          - "*"

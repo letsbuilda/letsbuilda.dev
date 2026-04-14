@@ -1,35 +1,30 @@
 {
   "name": "letsbuilda-dev",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "generate-types": "wrangler types",
-    "type-check": "generate-types && tsc"
+    "type-check": "tsc"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^12.6.12",
-    "@astrojs/react": "^4.4.2",
-    "@auth0/auth0-spa-js": "^2.9.1",
-    "@types/react": "^19.2.7",
+    "@astrojs/cloudflare": "^13.1.9",
+    "@astrojs/react": "^5.0.3",
+    "@auth0/auth0-spa-js": "^2.19.1",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.16.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "astro": "^6.1.3",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "wrangler": "^4.33.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-astro": "^1.5.0",
-    "eslint-plugin-react": "^7.37.3",
-    "typescript-eslint": "^8.48.0",
-    "prettier": "^3.7.3",
-    "prettier-plugin-astro": "^0.14.1"
+    "wrangler": "^4.82.2",
+    "@biomejs/biome": "2.4.10"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=24.12.0"
   }
 }

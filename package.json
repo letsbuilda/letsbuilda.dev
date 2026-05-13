@@ -16,7 +16,7 @@
     "@auth0/auth0-spa-js": "^2.19.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "^6.1.9",
+    "astro": "^6.3.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5"
   },

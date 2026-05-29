@@ -21,7 +21,7 @@
     "react-dom": "^19.2.5"
   },
   "devDependencies": {
-    "wrangler": "^4.82.2",
+    "wrangler": "^4.95.0",
     "@biomejs/biome": "2.4.13"
   },
   "engines": {

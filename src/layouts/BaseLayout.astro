@@ -1,0 +1,48 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+  </head>
+
+  <body>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/account">Account</a>
+      <span class="nav-spacer"></span>
+      <button id="btn-login" type="button" hidden>Log in</button>
+      <button id="btn-logout" type="button" hidden>Log out</button>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <script>
+      import { initPage, login, logout } from "../lib/auth";
+
+      const loginBtn = document.getElementById("btn-login");
+      const logoutBtn = document.getElementById("btn-logout");
+
+      loginBtn?.addEventListener("click", () => login());
+      logoutBtn?.addEventListener("click", () => logout());
+
+      // Bootstrap auth (handles any login redirect) and reflect the result in
+      // the nav. Buttons start hidden to avoid a flash of the wrong control.
+      const authed = await initPage();
+      if (loginBtn) loginBtn.hidden = authed;
+      if (logoutBtn) logoutBtn.hidden = !authed;
+    </script>
+  </body>
+</html>

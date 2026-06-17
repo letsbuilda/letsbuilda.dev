@@ -1,39 +1,21 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<!doctype html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>SPA SDK Sample</title>
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
-  </head>
+<BaseLayout title="letsbuilda.dev">
+  <h1>Welcome to letsbuilda.dev</h1>
+  <p>Let's build a... something. Glad you're here.</p>
 
-  <body>
-    <h2>SPA Authentication Sample</h2>
-    <p>Welcome to our page!</p>
-    <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-    <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+  <p id="account-cta" hidden>
+    <a href="/account">Go to your account &rarr;</a>
+  </p>
+  <p id="login-cta" hidden>Log in to view your account.</p>
 
-    <div class="hidden" id="gated-content">
-      <p>
-        You're seeing this content because you're currently
-        <strong>logged in</strong>.
-      </p>
-      <label>
-        Access token:
-        <pre id="ipt-access-token"></pre>
-      </label>
-      <label>
-        User profile:
-        <pre id="ipt-user-profile"></pre>
-      </label>
-    </div>
+  <script>
+    import { isAuthenticated } from "../lib/auth";
 
-    <script
-      src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"
-    ></script>
-    <script src="/js/app.js" is:inline></script>
-  </body>
-</html>
+    const authed = await isAuthenticated();
+    const id = authed ? "account-cta" : "login-cta";
+    document.getElementById(id)?.removeAttribute("hidden");
+  </script>
+</BaseLayout>

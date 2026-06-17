@@ -12,13 +12,8 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.7.0",
-    "@astrojs/react": "^5.0.7",
     "@auth0/auth0-spa-js": "^2.21.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "astro": "^6.4.8",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "astro": "^6.4.8"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",

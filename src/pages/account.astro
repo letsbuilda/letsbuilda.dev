@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Account · letsbuilda.dev">
+  <p id="account-loading">Loading your account&hellip;</p>
+
+  <section id="account" class="profile-card" hidden>
+    <img id="pf-picture" class="profile-card__avatar" alt="" />
+    <h1 id="pf-name" class="profile-card__name"></h1>
+    <dl class="profile-card__fields">
+      <dt>Email</dt>
+      <dd id="pf-email"></dd>
+      <dt>Email verified</dt>
+      <dd id="pf-email-verified"></dd>
+      <dt>Nickname</dt>
+      <dd id="pf-nickname"></dd>
+      <dt>User ID</dt>
+      <dd id="pf-sub"></dd>
+      <dt>Last updated</dt>
+      <dd id="pf-updated"></dd>
+    </dl>
+  </section>
+
+  <script>
+    import { getUser, isAuthenticated, login } from "../lib/auth";
+
+    if (!(await isAuthenticated())) {
+      // Gated page: bounce through Auth0 and come back here once logged in.
+      await login("/account");
+    } else {
+      const user = await getUser();
+
+      if (user) {
+        // textContent (never innerHTML) keeps profile values inert.
+        const setText = (id: string, value: unknown) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.textContent =
+              value === undefined || value === null || value === ""
+                ? "—"
+                : String(value);
+          }
+        };
+
+        const picture = document.getElementById("pf-picture");
+        if (picture instanceof HTMLImageElement && user.picture) {
+          picture.src = user.picture;
+          picture.alt = user.name ?? "Profile picture";
+        }
+
+        const verified =
+          user.email_verified === undefined
+            ? undefined
+            : user.email_verified
+              ? "Yes"
+              : "No";
+        const updated = user.updated_at
+          ? new Date(user.updated_at).toLocaleString()
+          : undefined;
+
+        setText("pf-name", user.name);
+        setText("pf-email", user.email);
+        setText("pf-email-verified", verified);
+        setText("pf-nickname", user.nickname);
+        setText("pf-sub", user.sub);
+        setText("pf-updated", updated);
+
+        document.getElementById("account")?.removeAttribute("hidden");
+        document.getElementById("account-loading")?.remove();
+      }
+    }
+  </script>
+</BaseLayout>

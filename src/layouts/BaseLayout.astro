@@ -30,7 +30,7 @@ const { title } = Astro.props;
     </main>
 
     <script>
-      import { initPage, login, logout } from "../lib/auth";
+      import { isAuthenticated, login, logout } from "../lib/auth";
 
       const loginBtn = document.getElementById("btn-login");
       const logoutBtn = document.getElementById("btn-logout");
@@ -38,9 +38,8 @@ const { title } = Astro.props;
       loginBtn?.addEventListener("click", () => login());
       logoutBtn?.addEventListener("click", () => logout());
 
-      // Bootstrap auth (handles any login redirect) and reflect the result in
-      // the nav. Buttons start hidden to avoid a flash of the wrong control.
-      const authed = await initPage();
+      // Reflect the session (after any login redirect) in the nav.
+      const authed = await isAuthenticated();
       if (loginBtn) loginBtn.hidden = authed;
       if (logoutBtn) logoutBtn.hidden = !authed;
     </script>

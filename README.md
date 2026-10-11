@@ -48,6 +48,8 @@ non-secret** environment variables:
 | :----------------------- | :--------------------------- |
 | `PUBLIC_AUTH0_DOMAIN`    | Auth0 tenant domain          |
 | `PUBLIC_AUTH0_CLIENT_ID` | Auth0 SPA application client ID |
+| `PUBLIC_AUTH0_AUDIENCE`  | Auth0 API identifier for the Mundane backend |
+| `PUBLIC_MUNDANE_API_URL` | Base URL of the Mundane API  |
 
 Copy `.env.example` to `.env` for local development, and set the same variables
 in the Cloudflare build environment for deploys (Astro inlines `PUBLIC_*` values
@@ -57,6 +59,12 @@ In the Auth0 application (type: **Single Page Application**), add both your loca
 (`http://localhost:4321`) and production (`https://letsbuilda.dev`) origins to
 **Allowed Callback URLs**, **Allowed Logout URLs**, and **Allowed Web Origins**,
 and enable **Refresh Token Rotation**.
+
+The `/mundane` page plays [Mundane](https://github.com/letsbuilda/mundane) against
+[`mundane-backend`](https://github.com/letsbuilda/mundane-backend), sending the
+player's access token with every request. That needs an Auth0 **API** with identifier
+`https://mundane.letsbuilda.dev` (RS256) and **Allow Offline Access** turned on, so
+the SPA's refresh tokens work for it.
 
 ## 👀 Want to learn more?
 

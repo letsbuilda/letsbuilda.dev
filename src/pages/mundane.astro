@@ -1,0 +1,160 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Mundane · letsbuilda.dev">
+  <h1>Mundane</h1>
+  <p>No dragons. No spells. Just Tuesday.</p>
+
+  <p id="mundane-status">Loading&hellip;</p>
+  <button id="mundane-new" type="button" class="mundane-button" hidden>
+    New game
+  </button>
+
+  <section id="mundane-game" hidden>
+    <p id="mundane-turn"></p>
+    <div id="mundane-players" class="mundane-players"></div>
+    <h2>Stack</h2>
+    <ol id="mundane-stack"></ol>
+    <button id="mundane-pass" type="button" class="mundane-button">
+      Pass priority
+    </button>
+    <p id="mundane-error" class="mundane-error" role="alert"></p>
+  </section>
+
+  <script>
+    import { isAuthenticated, login } from "../lib/auth";
+    import {
+      type Action,
+      createGame,
+      type GameState,
+      MundaneError,
+      readGame,
+      submitAction,
+    } from "../lib/mundane";
+
+    const status = document.getElementById("mundane-status");
+    const newButton = document.getElementById("mundane-new");
+    const gameSection = document.getElementById("mundane-game");
+    const errorLine = document.getElementById("mundane-error");
+
+    // textContent (never innerHTML) keeps API values inert.
+    const el = (tag: string, text = ""): HTMLElement => {
+      const node = document.createElement(tag);
+      node.textContent = text;
+      return node;
+    };
+
+    let gameId = new URLSearchParams(window.location.search).get("game");
+
+    function showError(error: unknown) {
+      if (errorLine) {
+        errorLine.textContent =
+          error instanceof MundaneError ? error.message : String(error);
+      }
+    }
+
+    async function act(action: Action) {
+      if (!gameId) return;
+      try {
+        render(await submitAction(gameId, action));
+      } catch (error) {
+        showError(error);
+      }
+    }
+
+    function render(state: GameState) {
+      if (errorLine) errorLine.textContent = "";
+      const turn = document.getElementById("mundane-turn");
+      if (turn) {
+        const priority = state.players[state.priority_player]?.name ?? "";
+        turn.textContent =
+          state.winner === null
+            ? `Turn ${state.turn}, ${state.phase}. ${priority} has priority.`
+            : `${state.players[state.winner]?.name} wins!`;
+      }
+
+      const players = document.getElementById("mundane-players");
+      players?.replaceChildren(
+        ...state.players.map((player, index) => {
+          const card = el("article");
+          card.className = "mundane-player";
+          card.append(
+            el("h2", player.name),
+            el("p", `Composure ${player.composure} · Time ${player.time}`),
+            el("p", `Board: ${player.board.join(", ") || "—"}`),
+          );
+          const hand = el("ul");
+          player.hand.forEach((cardId, handIndex) => {
+            const item = el("li", `${cardId} `);
+            const mine = index === state.priority_player && state.winner === null;
+            for (const [label, type] of [
+              ["Play", "play_card"],
+              ["Cast", "cast_instant"],
+            ] as const) {
+              const button = el("button", label) as HTMLButtonElement;
+              button.type = "button";
+              button.className = "mundane-button";
+              button.disabled = !mine;
+              button.addEventListener("click", () =>
+                act({ type, player: index, hand_index: handIndex }),
+              );
+              item.append(button);
+            }
+            hand.append(item);
+          });
+          card.append(el("h3", "Hand"), hand);
+          return card;
+        }),
+      );
+
+      const stack = document.getElementById("mundane-stack");
+      stack?.replaceChildren(
+        ...state.stack.map((item) =>
+          el(
+            "li",
+            `${item.card_id} (${state.players[item.controller]?.name ?? "?"})`,
+          ),
+        ),
+      );
+
+      const pass = document.getElementById("mundane-pass");
+      if (pass instanceof HTMLButtonElement) {
+        pass.disabled = state.winner !== null;
+        pass.onclick = () =>
+          act({ type: "pass_priority", player: state.priority_player });
+      }
+
+      gameSection?.removeAttribute("hidden");
+    }
+
+    newButton?.addEventListener("click", async () => {
+      try {
+        const created = await createGame();
+        gameId = created.game_id;
+        const url = new URL(window.location.href);
+        url.searchParams.set("game", gameId);
+        window.history.replaceState({}, "", url);
+        render(created.state);
+      } catch (error) {
+        showError(error);
+        if (status) status.textContent = String(error);
+      }
+    });
+
+    if (!(await isAuthenticated())) {
+      // Gated page: games belong to a signed-in player.
+      await login(window.location.pathname + window.location.search);
+    } else {
+      newButton?.removeAttribute("hidden");
+      if (status) status.textContent = "";
+      if (gameId) {
+        try {
+          render(await readGame(gameId));
+        } catch (error) {
+          if (status) status.textContent = String(error);
+        }
+      }
+    }
+  </script>
+</BaseLayout>

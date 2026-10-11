@@ -9,10 +9,12 @@ import {
 // variables (see .env.example).
 const domain = import.meta.env.PUBLIC_AUTH0_DOMAIN;
 const clientId = import.meta.env.PUBLIC_AUTH0_CLIENT_ID;
+// The Auth0 API that access tokens are minted for: the Mundane backend.
+const audience = import.meta.env.PUBLIC_AUTH0_AUDIENCE;
 
-if (!domain || !clientId) {
+if (!domain || !clientId || !audience) {
   throw new Error(
-    "Missing Auth0 configuration. Set PUBLIC_AUTH0_DOMAIN and PUBLIC_AUTH0_CLIENT_ID.",
+    "Missing Auth0 configuration. Set PUBLIC_AUTH0_DOMAIN, PUBLIC_AUTH0_CLIENT_ID and PUBLIC_AUTH0_AUDIENCE.",
   );
 }
 
@@ -55,6 +57,7 @@ async function bootstrap(): Promise<Auth0Client> {
     cacheLocation: "localstorage",
     authorizationParams: {
       redirect_uri: window.location.origin,
+      audience,
       scope: "openid profile email",
     },
   });
@@ -85,6 +88,12 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function getUser(): Promise<User | undefined> {
   const client = await getClient();
   return client.getUser();
+}
+
+// An access token for the backend API (`audience`), refreshed silently as needed.
+export async function getAccessToken(): Promise<string> {
+  const client = await getClient();
+  return client.getTokenSilently();
 }
 
 // Redirect to Auth0 to log in, returning to `returnTo` afterwards.

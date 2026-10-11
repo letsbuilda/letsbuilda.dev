@@ -85,3 +85,39 @@ main {
   margin: 0;
   word-break: break-word;
 }
+
+.mundane-players {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.mundane-player {
+  padding: 1rem;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+}
+
+.mundane-player h2,
+.mundane-player h3 {
+  margin: 0 0 0.5rem;
+}
+
+.mundane-button {
+  cursor: pointer;
+  margin: 0.25rem 0.25rem 0 0;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #f9fafb;
+  font: inherit;
+}
+
+.mundane-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.mundane-error {
+  color: #b91c1c;
+}

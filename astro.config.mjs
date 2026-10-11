@@ -1,11 +1,8 @@
 // @ts-check
 
-import cloudflare from "@astrojs/cloudflare";
-import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 
-// https://astro.build/config
+// https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  adapter: cloudflare(),
-  integrations: [react()],
+  site: "https://letsbuilda.dev",
 });

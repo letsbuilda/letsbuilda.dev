@@ -19,5 +19,15 @@ updates:
       javascript-dependencies:
         patterns:
           - "*"
+        # @astrojs/check declares a peer range of typescript ^5 || ^6, so
+        # TypeScript 7+ breaks `astro check`. Keep it out of the group so one
+        # incompatible major does not fail the whole grouped update.
+        exclude-patterns:
+          - typescript
+    ignore:
+      # @types/node follows the Node major pinned in .nvmrc (24).
+      - dependency-name: "@types/node"
+        update-types:
+          - version-update:semver-major
     cooldown:
       default-days: 7

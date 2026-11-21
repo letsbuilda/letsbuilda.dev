@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "2.29.0",
-    "astro": "7.4.2"
+    "astro": "7.4.7"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
